@@ -1,0 +1,34 @@
+<tool id="repeatmodeler_db_builder_data_manager" name="repeatmodeler DB builder" tool_type="manage_data" version="0.0.1" profile="17.01">
+  <description>Build a RepeatModeler database from a FASTA file</description>
+
+  <requirements>
+    <requirement type="package">repeatmodeler</requirement>
+  </requirements>
+
+  <command detect_errors="exit_code"><![CDATA[
+    python '$__tool_directory__/make_repeatmodeler_db.py' '${out_file}'
+  ]]></command>
+  <inputs>
+    <param name="repeatmodeler_db_name" type="text" label="RepeatModeler DB Name" />
+    <param name="db_description" type="text" label="Database description" />
+    <param name="input_fasta" label="Genomic DNA FASTA file" multiple="True" type="data" />
+  </inputs>
+  <outputs>
+    <data name="out_file" format="data_manager_json" />
+  </outputs>
+  <tests>
+  </tests>
+  <help>
+  </help>
+  <citations>
+    <citation type="bibtex"><![CDATA[
+      @article{smit2008repeatmodeler,
+        title={RepeatModeler Open-1.0.11},
+        author={Smit, AFA and Hubley, R},
+        journal={Available fom http://www.repeatmasker.org},
+        year={2008}
+      }
+      ]]>
+    </citation>
+  </citations>
+</tool>
