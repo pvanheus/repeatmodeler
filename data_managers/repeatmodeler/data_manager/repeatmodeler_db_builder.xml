@@ -1,4 +1,4 @@
-<tool id="repeatmodeler_db_builder_data_manager" name="repeatmodeler DB builder" tool_type="manage_data" version="0.0.1" profile="17.01">
+<tool id="repeatmodeler_db_builder" name="repeatmodeler DB builder" tool_type="manage_data" version="0.0.1" profile="17.01">
   <description>Build a RepeatModeler database from a FASTA file</description>
 
   <requirements>
@@ -11,12 +11,17 @@
   <inputs>
     <param name="repeatmodeler_db_name" type="text" label="RepeatModeler DB Name" />
     <param name="db_description" type="text" label="Database description" />
-    <param name="input_fasta" label="Genomic DNA FASTA file" multiple="True" type="data" />
+    <param name="input_fasta" label="Genomic DNA FASTA file" multiple="True" format="fasta" type="data" />
   </inputs>
   <outputs>
     <data name="out_file" format="data_manager_json" />
   </outputs>
   <tests>
+    <test>
+      <param name="repeatmodeler_db_name" value="test1" />
+      <param name="db_description" value="Test DB" />
+      <output name="out_file" file="test_out1.json" ftype="data_manager_json" />
+    </test>
   </tests>
   <help>
   </help>

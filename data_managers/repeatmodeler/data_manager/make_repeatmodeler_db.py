@@ -72,20 +72,17 @@ def valid_filename(name):
     return valid
 
 
-logfile = open('/tmp/logfile.txt', 'w')
-print(sys.argv, file=logfile)
 json_filename = sys.argv[1]
 
 
 with open(json_filename) as json_file:
     data = json.load(json_file)
-    db_name = data['param_dict']['repeatmodeler_db_name']
+    db_name = data['param_dict']['repeatmodeler_db_name'].strip()
     if not valid_filename(db_name):
         print("DB name ({}) is not a valid filename", file=sys.stderr)
         exit(1)
-    db_description = data['param_dict']['db_description']
+    db_description = data['param_dict']['db_description'].strip()
     fasta_input_filenames = data['param_dict']['input_fasta']
-    print("GOT HERE:", type(fasta_input_filenames), file=logfile)
     if type(fasta_input_filenames) is not list:
         fasta_input_filenames = [fasta_input_filenames]
     # output path is extra_files_path of first and only output
@@ -99,11 +96,16 @@ with open(json_filename) as json_file:
     cmd = ["BuildDatabase", "-engine", "ncbi", "-name", db_name,
            "-batch", batch_input_filename]
     subprocess.check_call(cmd, cwd=output_path)
+    os.unlink(batch_input_filename)
 
 db_id = '{}_{}'.format(db_name, GetHashofDirs(output_path))
+db_path = os.path.join(db_id, db_name)
 if db_description.strip() == '':
     db_description = db_name
-output_entry = dict(value=db_id, name=db_description, path=db_id)
+output_entry = dict(value=db_id, db_name=db_name,
+                    description=db_description, path=db_path)
 data_manager_dict = dict(data_tables=dict(repeatmodeler_db=[output_entry]))
+with open('/tmp/out_file1.json', 'w') as output_file:
+    json.dump(data_manager_dict, output_file)
 with open(json_filename, 'w') as output_file:
     json.dump(data_manager_dict, output_file)
